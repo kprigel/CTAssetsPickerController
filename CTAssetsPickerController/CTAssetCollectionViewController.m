@@ -192,10 +192,13 @@
     
     self.fetchResults = [NSMutableArray arrayWithArray:fetchResults];
     
-    [self updateAssetCollections];
-    [self reloadData];
-    [self showDefaultAssetCollection];
-}
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [self updateAssetCollections];
+               dispatch_async(dispatch_get_main_queue(), ^(void) {
+                        [self reloadData];
+                        [self showDefaultAssetCollection];
+                    });
+            });}
 
 - (void)updateAssetCollections
 {
@@ -209,15 +212,15 @@
             
             if (!self.picker.showsEmptyAlbums)
             {
-                PHFetchOptions *options = [PHFetchOptions new];
+               /*PHFetchOptions *options = [PHFetchOptions new];
                 options.predicate = self.picker.assetsFetchOptions.predicate;
                 
-                if ([options respondsToSelector:@selector(setFetchLimit:)])
-                    options.fetchLimit = 1;
+                options.fetchLimit = 1;
                 
                 NSInteger count = [assetCollection ctassetPikcerCountOfAssetsFetchedWithOptions:options];
                 
-                showsAssetCollection = (count > 0);
+                showsAssetCollection = (count > 0);*/
+                showsAssetCollection = (assetCollection.estimatedAssetCount > 0);
             }
             
             if (showsAssetCollection)
