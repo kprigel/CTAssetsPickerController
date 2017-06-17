@@ -367,8 +367,18 @@
 
 - (void)resetTitle
 {
-    if (!self.picker.title)
-        self.title = CTAssetsPickerLocalizedString(@"Photos", nil);
+    if (!self.picker.title){
+        NSPredicate *predicateMediaType = [NSPredicate predicateWithFormat:@"mediaType = %d",PHAssetMediaTypeVideo];
+        NSCompoundPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[predicateMediaType]];
+        
+        
+        if ([[NSString stringWithFormat:@"%@",self.picker.assetsFetchOptions.predicate] isEqualToString:[NSString stringWithFormat:@"%@",compoundPredicate]]){
+            self.title=@"Videos";
+        }
+        else{
+            
+            self.title = CTAssetsPickerLocalizedString(@"Photos", nil);}
+    }
     else
         self.title = self.picker.title;
 }
