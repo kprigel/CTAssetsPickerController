@@ -135,6 +135,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) BOOL showsSelectionIndex;
 
+/*
+* Allows designation of no selection of assets, and by default load image view on tap
+*/
+
+@property (nonatomic,assign) BOOL noSelection;
+
+/**
+
+
 /**
  *  The split view controller of the picker hierarchy. (read-only)
  *

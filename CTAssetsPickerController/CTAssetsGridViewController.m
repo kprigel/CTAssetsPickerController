@@ -738,6 +738,13 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
     
     if (!cell.isEnabled)
         return NO;
+    else if (self.picker.noSelection==YES){
+        CTAssetsPageViewController *vc = [[CTAssetsPageViewController alloc] initWithFetchResult:self.fetchResult];
+        vc.allowsSelection = NO;
+        vc.pageIndex = indexPath.item;
+        
+        [self.navigationController pushViewController:vc animated:YES];
+    }
     else if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:shouldSelectAsset:)])
         return [self.picker.delegate assetsPickerController:self.picker shouldSelectAsset:asset];
     else
