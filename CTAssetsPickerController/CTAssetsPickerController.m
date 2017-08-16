@@ -72,13 +72,14 @@ NSString * const CTAssetsPickerDidDeselectAssetNotification = @"CTAssetsPickerDi
         _assetCollectionFetchOptions        = nil;
         _assetsFetchOptions                 = nil;
         _selectedAssets                     = [NSMutableArray new];
+        _downloadedAssets                   = [NSMutableArray new];
         _showsCancelButton                  = YES;
         _showsEmptyAlbums                   = YES;
         _showsNumberOfAssets                = YES;
         _alwaysEnableDoneButton             = NO;
         _showsSelectionIndex                = NO;
+        _noSelection                        =NO;
         _defaultAssetCollection             = PHAssetCollectionSubtypeAny;
-        _noSelection                        = NO;
         
         [self initAssetCollectionSubtypes];
         [self initThumbnailRequestOptions];

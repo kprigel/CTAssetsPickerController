@@ -25,21 +25,26 @@
  */
 
 #import <UIKit/UIKit.h>
-#import <Photos/Photos.h>
-#import "CTAssetThumbnailView.h"
 
 
+/**
+ *  The check mark to show selected asset.
+ */
+@interface CTDownloadCheckmark : UIView
 
-@interface CTAssetsGridViewCell : UICollectionViewCell
+#pragma mark Customizing Appearance
 
-@property (nonatomic, assign, getter = isEnabled) BOOL enabled;
-@property (nonatomic, assign) BOOL showsSelectionIndex;
-@property (nonatomic, assign) NSUInteger selectionIndex;
-@property (nonatomic, assign) BOOL alreadyDownloaded;
+/**
+ *  @name Customizing Appearance
+ */
 
-@property (nonatomic, weak, nullable) UIColor *disabledColor UI_APPEARANCE_SELECTOR;
-@property (nonatomic, weak, nullable) UIColor *highlightedColor UI_APPEARANCE_SELECTOR;
-
-- (void)bind:(nonnull PHAsset *)asset;
+/**
+ *  To set margin of the check mark from specific edges.
+ *
+ *  @param margin The margin from the edges.
+ *  @param edgeX  The layout attribute respresents vertical edge that the check mark pins to. Either `NSLayoutAttributeLeft` or `NSLayoutAttributeRight`.
+ *  @param edgeY  The layout attribute respresents horizontal edge that the check mark pins to. Either `NSLayoutAttributeTop` or `NSLayoutAttributeBottom`.
+ */
+- (void)setMargin:(CGFloat)margin forVerticalEdge:(NSLayoutAttribute)edgeX horizontalEdge:(NSLayoutAttribute)edgeY UI_APPEARANCE_SELECTOR;
 
 @end

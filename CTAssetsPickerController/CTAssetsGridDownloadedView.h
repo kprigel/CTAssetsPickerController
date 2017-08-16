@@ -2,7 +2,7 @@
  
  MIT License (MIT)
  
- Copyright (c) 2015 Clement CN Tsang
+ Copyright (c) 2013 Clement CN Tsang
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,21 +25,16 @@
  */
 
 #import <UIKit/UIKit.h>
-#import <Photos/Photos.h>
-#import "CTAssetThumbnailView.h"
+
+@interface CTAssetsGridDownloadedView : UIView
 
 
 
-@interface CTAssetsGridViewCell : UICollectionViewCell
+@property (nonatomic, weak, nullable) UIColor *selectedBackgroundColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) CGFloat borderWidth UI_APPEARANCE_SELECTOR;
 
-@property (nonatomic, assign, getter = isEnabled) BOOL enabled;
-@property (nonatomic, assign) BOOL showsSelectionIndex;
-@property (nonatomic, assign) NSUInteger selectionIndex;
-@property (nonatomic, assign) BOOL alreadyDownloaded;
+@property (nonatomic, weak, nullable) UIFont *font UI_APPEARANCE_SELECTOR DEPRECATED_MSG_ATTRIBUTE("Use setTextAttributes: of CTAssetSelectionLabel instead.");
+@property (nonatomic, weak, nullable) UIColor *textColor UI_APPEARANCE_SELECTOR DEPRECATED_MSG_ATTRIBUTE("Use setTextAttributes: of CTAssetSelectionLabel instead.");
 
-@property (nonatomic, weak, nullable) UIColor *disabledColor UI_APPEARANCE_SELECTOR;
-@property (nonatomic, weak, nullable) UIColor *highlightedColor UI_APPEARANCE_SELECTOR;
-
-- (void)bind:(nonnull PHAsset *)asset;
 
 @end

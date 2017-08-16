@@ -198,6 +198,26 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
                                   options:self.picker.assetsFetchOptions];
     
     self.fetchResult = fetchResult;
+    
+    if (self.picker.excludeUser==TRUE){
+        NSMutableArray *filteredAssets = [NSMutableArray new];
+        
+        
+        [fetchResult enumerateObjectsUsingBlock:^(PHAsset *thisAsset, NSUInteger idx, BOOL *stop) {
+            if (thisAsset.location==nil) {
+                [filteredAssets addObject:thisAsset];
+            }
+        }];
+        
+        PHAssetCollection *assetCollectionWithLocation = [PHAssetCollection transientAssetCollectionWithAssets:filteredAssets title:@"Assets with location data"];
+        PHFetchResult *filteredResult = [PHAsset fetchAssetsInAssetCollection:assetCollectionWithLocation options:nil];
+        
+        
+        self.fetchResult=filteredResult;
+
+    }
+    
+    
     [self reloadData];
 }
 
@@ -429,19 +449,23 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
 - (void)assetsPickerDidSelectAsset:(NSNotification *)notification
 {
     PHAsset *asset = (PHAsset *)notification.object;
+    
+
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.fetchResult indexOfObject:asset] inSection:0];
     [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
     
     [self updateSelectionOrderLabels];
+    
 }
 
 - (void)assetsPickerDidDeselectAsset:(NSNotification *)notification
 {
     PHAsset *asset = (PHAsset *)notification.object;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.fetchResult indexOfObject:asset] inSection:0];
+       NSIndexPath *indexPath = [NSIndexPath indexPathForItem:[self.fetchResult indexOfObject:asset] inSection:0];
     [self.collectionView deselectItemAtIndexPath:indexPath animated:NO];
     
     [self updateSelectionOrderLabels];
+    
 }
 
 
@@ -631,6 +655,7 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
 - (void)showNoAssets
 {
     CTAssetsPickerNoAssetsView *view = [CTAssetsPickerNoAssetsView new];
+    view.excludeUser=self.picker.excludeUser;
     [self.view addSubview:view];
     [view setNeedsUpdateConstraints];
     [view updateConstraintsIfNeeded];
@@ -685,6 +710,12 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
         [collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
     }
     
+    if ([self.picker.downloadedAssets indexOfObject:asset.localIdentifier]!=NSNotFound){
+        NSLog(@"asset.localIdentified: %@",asset.localIdentifier);
+        cell.alreadyDownloaded=YES;
+        [cell setAlreadyDownloaded:YES];
+    }
+    
     [cell bind:asset];
     
     UICollectionViewLayoutAttributes *attributes =
@@ -734,21 +765,23 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
 {
     PHAsset *asset = [self assetAtIndexPath:indexPath];
     
-    CTAssetsGridViewCell *cell = (CTAssetsGridViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    
-    if (!cell.isEnabled)
-        return NO;
-    else if (self.picker.noSelection==YES){
+    if (self.picker.noSelection==YES){
         CTAssetsPageViewController *vc = [[CTAssetsPageViewController alloc] initWithFetchResult:self.fetchResult];
         vc.allowsSelection = NO;
         vc.pageIndex = indexPath.item;
         
         [self.navigationController pushViewController:vc animated:YES];
     }
+    else{
+    CTAssetsGridViewCell *cell = (CTAssetsGridViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    
+    if (!cell.isEnabled)
+        return NO;
     else if ([self.picker.delegate respondsToSelector:@selector(assetsPickerController:shouldSelectAsset:)])
         return [self.picker.delegate assetsPickerController:self.picker shouldSelectAsset:asset];
     else
         return YES;
+    }
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath

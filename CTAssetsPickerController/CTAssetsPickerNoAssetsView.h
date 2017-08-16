@@ -28,4 +28,9 @@
 
 @interface CTAssetsPickerNoAssetsView : UIView
 
+#pragma mark - Accessors
+
+@property bool excludeUser;
+
+
 @end

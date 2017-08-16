@@ -28,6 +28,7 @@
 #import "CTAssetsPickerDefines.h"
 #import "CTAssetsGridViewCell.h"
 #import "CTAssetsGridSelectedView.h"
+#import "CTAssetsGridDownloadedView.h"
 #import "PHAsset+CTAssetsPickerController.h"
 #import "NSDateFormatter+CTAssetsPickerController.h"
 #import "UIImage+CTAssetsPickerController.h"
@@ -42,6 +43,7 @@
 @property (nonatomic, strong) UIView *disabledView;
 @property (nonatomic, strong) UIView *highlightedView;
 @property (nonatomic, strong) CTAssetsGridSelectedView *selectedView;
+@property (nonatomic, strong) CTAssetsGridDownloadedView *downloadedView;
 
 @property (nonatomic, assign) BOOL didSetupConstraints;
 
@@ -100,6 +102,11 @@
     selectedView.hidden = YES;
     self.selectedView = selectedView;
     [self addSubview:self.selectedView];
+    
+    CTAssetsGridDownloadedView *downloadedView = [CTAssetsGridDownloadedView newAutoLayoutView];
+    downloadedView.hidden = YES;
+    self.downloadedView = downloadedView;
+    [self addSubview:self.downloadedView];
 }
 
 #pragma mark - Apperance
@@ -147,6 +154,13 @@
     self.selectedView.hidden = !selected;
 }
 
+- (void)setAlreadyDownloaded:(BOOL)downloaded
+{
+   _alreadyDownloaded = downloaded;
+    self.downloadedView.hidden = !downloaded;
+}
+
+
 - (void)setShowsSelectionIndex:(BOOL)showsSelectionIndex
 {
     _showsSelectionIndex = showsSelectionIndex;
@@ -171,6 +185,10 @@
             [self.disabledView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero];
             [self.highlightedView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero];
             [self.selectedView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero];
+            [self.downloadedView autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero];
+            
+          //  [self.downloadedView autoPinEdgeToSuperviewEdge:ALEdgeLeft];
+           // [self.downloadedView autoPinEdgeToSuperviewEdge:ALEdgeTop];
         }];
         
         [self.disabledImageView autoCenterInSuperview];

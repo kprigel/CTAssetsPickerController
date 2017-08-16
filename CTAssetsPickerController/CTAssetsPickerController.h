@@ -44,6 +44,17 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id <CTAssetsPickerControllerDelegate> delegate;
 
 /**
+ *  The previously downloaded assets.
+ *
+ *  It contains previously downloaded `PHAsset` objects.
+ */
+@property (nonatomic, strong) NSMutableArray *downloadedAssets;
+
+/** For icloud shared albums, set to true to exclude assets from the user 
+*/
+@property (nonatomic,assign) BOOL excludeUser;
+
+/**
  *  Set the `assetCollectionSubtypes` to specify which asset collections (albums) to be shown in the picker.
  *
  *  You can specify which albums and their order to be shown in the picker by creating an `NSArray` of `NSNumber`
@@ -135,14 +146,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) BOOL showsSelectionIndex;
 
-/*
-* Allows designation of no selection of assets, and by default load image view on tap
-*/
+/**
+ * Allows designation of no selection of assets, and by default load image view on tap
+ */
 
 @property (nonatomic,assign) BOOL noSelection;
-
-/**
-
 
 /**
  *  The split view controller of the picker hierarchy. (read-only)

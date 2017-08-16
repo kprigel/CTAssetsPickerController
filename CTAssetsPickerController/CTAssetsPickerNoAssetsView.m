@@ -28,10 +28,12 @@
 #import "CTAssetsPickerDefines.h"
 #import "CTAssetsPickerNoAssetsView.h"
 #import "NSBundle+CTAssetsPickerController.h"
+#import "CTAssetsPickerController.h"
 
 
 
 @interface CTAssetsPickerNoAssetsView ()
+
 
 @property (nonatomic, strong) UILabel *title;
 @property (nonatomic, strong) UILabel *message;
@@ -94,10 +96,10 @@
 {
     NSString *format;
     
-    if ([self isCameraDeviceAvailable])
-        format = CTAssetsPickerLocalizedString(@"You can take photos and videos using the camera, or sync photos and videos onto your %@\nusing iTunes.", nil);
+    if (self.excludeUser==TRUE)
+        format = CTAssetsPickerLocalizedString(@"There are no items available in this Album.  No other users have added any pictures or videos to this Shared Album.", nil);
     else
-        format = CTAssetsPickerLocalizedString(@"You can sync photos and videos onto your %@ using iTunes.", nil);
+        format = CTAssetsPickerLocalizedString(@"There are no items available in this Album.", nil);
     
     return [NSString stringWithFormat:format, self.deviceModel];
 }
@@ -119,6 +121,7 @@
         [self.title autoAlignAxisToSuperviewAxis:ALAxisVertical];
         [self.title autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeBottom];
         
+        self.message.text=[self noAssetsMessage];
         [self.message autoAlignAxis:ALAxisVertical toSameAxisOfView:self.title];
         [self.message autoPinEdge:ALEdgeTop toEdge:ALEdgeBottom ofView:self.title withOffset:10];
         [self.message autoPinEdgesToSuperviewEdgesWithInsets:UIEdgeInsetsZero excludingEdge:ALEdgeTop];
@@ -128,6 +131,8 @@
     
     [super updateConstraints];
 }
+
+
 
 
 @end
