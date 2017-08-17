@@ -131,6 +131,9 @@
     else if (asset.ctassetsPickerIsVideo)
         return UIEdgeInsetsMake(4.5, 4.5, 4.5, 4.5);
     
+    else if (asset.ctassetsPickerIsLivePhoto)
+        return UIEdgeInsetsMake(2.5, 2.5, 2.5, 2.5);
+    
     else
         return UIEdgeInsetsZero;
 }

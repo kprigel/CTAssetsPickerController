@@ -41,6 +41,12 @@
     return (self.mediaType == PHAssetMediaTypeVideo);
 }
 
+- (BOOL)ctassetsPickerIsLivePhoto
+{
+    return (self.mediaSubtypes == PHAssetMediaSubtypePhotoLive);
+}
+
+
 - (BOOL)ctassetsPickerIsHighFrameRateVideo
 {
     return (self.mediaType == PHAssetMediaTypeVideo && (self.mediaSubtypes & PHAssetMediaSubtypeVideoHighFrameRate));
@@ -63,6 +69,9 @@
     
     else if (self.ctassetsPickerIsVideo)
         imageName = @"BadgeVideoSmall";
+    
+    else if (self.ctassetsPickerIsLivePhoto)
+        imageName = @"BadgeLiveSmall";
     
     if (imageName)
         return [[UIImage ctassetsPickerImageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];

@@ -30,6 +30,7 @@
 
 - (BOOL)ctassetsPickerIsPhoto;
 - (BOOL)ctassetsPickerIsVideo;
+- (BOOL)ctassetsPickerIsLivePhoto;
 - (BOOL)ctassetsPickerIsHighFrameRateVideo;
 - (BOOL)ctassetsPickerIsTimelapseVideo;
 

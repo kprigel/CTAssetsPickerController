@@ -132,7 +132,7 @@
 
 - (void)setupOverlayForAsset:(PHAsset *)asset
 {
-    if (asset.ctassetsPickerIsVideo)
+    if ((asset.ctassetsPickerIsVideo)||(asset.ctassetsPickerIsLivePhoto))
     {
         if (!self.overlay) {
             self.overlay = [[CTAssetThumbnailOverlay alloc] initWithFrame:self.bounds];
@@ -140,8 +140,9 @@
         }
         
         NSString *duration = nil;
-
-        if (self.showsDuration)
+        
+    
+        if ((self.showsDuration)&&(!asset.ctassetsPickerIsLivePhoto))
         {
             NSDateFormatter *df = [NSDateFormatter new];
             duration = [df ctassetsPickerStringFromTimeInterval:asset.duration];
