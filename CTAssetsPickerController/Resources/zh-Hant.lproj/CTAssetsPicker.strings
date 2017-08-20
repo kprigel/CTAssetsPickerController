@@ -4,6 +4,7 @@
 
 /* Default title */
 "Photos" = "照片";
+"Vidoes" = "視頻";
 
 /* No. of selected */
 "%@ Photo Selected" = "已選取 %@ 張照片";

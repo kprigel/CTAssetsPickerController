@@ -4,6 +4,7 @@
 
 /* Default title */
 "Photos" = "写真";
+"Videos" = "ビデオ";
 
 /* No. of selected */
 "%@ Photo Selected" = "%@ 枚の写真が選択されました";

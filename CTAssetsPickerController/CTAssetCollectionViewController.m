@@ -34,7 +34,7 @@
 #import "PHAsset+CTAssetsPickerController.h"
 #import "PHImageManager+CTAssetsPickerController.h"
 #import "NSBundle+CTAssetsPickerController.h"
-
+#import "NSNumberFormatter+CTAssetsPickerController.h"
 
 
 
@@ -90,9 +90,23 @@
     [self setupButtons];
     [self updateTitle:self.picker.selectedAssets];
     [self updateButton:self.picker.selectedAssets];
+    [self resetTitle];
     [self selectDefaultAssetCollection];
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+    if (![self isTopViewController]){
+    NSPredicate *predicateMediaType = [NSPredicate predicateWithFormat:@"mediaType = %d",PHAssetMediaTypeVideo];
+    NSCompoundPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[predicateMediaType]];
+    
+    if ([[NSString stringWithFormat:@"%@",self.picker.assetsFetchOptions.predicate] isEqualToString:[NSString stringWithFormat:@"%@",compoundPredicate]]){
+        self.title=CTAssetsPickerLocalizedString(@"Videos",nil);
+    }
+    else{
+        self.title = CTAssetsPickerLocalizedString(@"Photos", nil);}
+    }
+}
 - (void)dealloc
 {
     [self unregisterChangeObserver];
@@ -341,13 +355,29 @@
     if ([self isTopViewController] && selectedAssets.count > 0)
         self.title = self.picker.selectedAssetsString;
     else
-        [self resetTitle];
+       // if ([self isTopViewController])
+            [self resetTitle];
+    
 }
 
 - (void)updateButton:(NSArray *)selectedAssets
 {
     self.navigationItem.leftBarButtonItem = (self.picker.showsCancelButton) ? self.cancelButton : nil;
-    self.navigationItem.rightBarButtonItem = [self isTopViewController] ? self.doneButton : nil;
+    
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    
+    
+    
+    if((orientation == 0)||(orientation == UIInterfaceOrientationPortrait)){
+         self.navigationItem.rightBarButtonItem = [self isTopViewController] ? self.doneButton : self.doneButton;
+    }
+    else if((orientation == UIInterfaceOrientationLandscapeLeft)
+                ||(orientation == UIInterfaceOrientationLandscapeRight))
+    {
+         self.navigationItem.rightBarButtonItem = [self isTopViewController] ? self.doneButton : nil;
+    }
+        
+   
     
     if (self.picker.alwaysEnableDoneButton)
         self.navigationItem.rightBarButtonItem.enabled = YES;
@@ -359,25 +389,100 @@
 {
     UIViewController *vc = self.splitViewController.viewControllers.lastObject;
     
-    if ([vc isMemberOfClass:[UINavigationController class]])
+    if ([vc isKindOfClass:[UINavigationController class]])
         return (self == ((UINavigationController *)vc).topViewController);
     else
         return NO;
 }
 
+- (NSPredicate *)predicateOfMediaType:(PHAssetMediaType)type
+{
+    return [NSPredicate predicateWithBlock:^BOOL(PHAsset *asset, NSDictionary *bindings) {
+        return (asset.mediaType == type);
+    }];
+}
+
+
+
 - (void)resetTitle
 {
+    
+    
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    
     if (!self.picker.title){
-        NSPredicate *predicateMediaType = [NSPredicate predicateWithFormat:@"mediaType = %d",PHAssetMediaTypeVideo];
-        NSCompoundPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[predicateMediaType]];
-        
-        
-        if ([[NSString stringWithFormat:@"%@",self.picker.assetsFetchOptions.predicate] isEqualToString:[NSString stringWithFormat:@"%@",compoundPredicate]]){
-            self.title=@"Videos";
-        }
-        else{
+        if((orientation == UIInterfaceOrientationLandscapeLeft)
+                                                                                ||(orientation == UIInterfaceOrientationLandscapeRight)){
             
-            self.title = CTAssetsPickerLocalizedString(@"Photos", nil);}
+            NSPredicate *predicateMediaType = [NSPredicate predicateWithFormat:@"mediaType = %d",PHAssetMediaTypeVideo];
+            NSCompoundPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[predicateMediaType]];
+
+            if ([[NSString stringWithFormat:@"%@",self.picker.assetsFetchOptions.predicate] isEqualToString:[NSString stringWithFormat:@"%@",compoundPredicate]]){
+                self.title=CTAssetsPickerLocalizedString(@"Videos",nil);
+            }
+            else{
+                self.title = CTAssetsPickerLocalizedString(@"Photos", nil);}
+            
+        }
+        else if((orientation == 0)||(orientation == UIInterfaceOrientationPortrait))
+        {
+            
+            if (![self isTopViewController]){
+                NSPredicate *predicateMediaType = [NSPredicate predicateWithFormat:@"mediaType = %d",PHAssetMediaTypeVideo];
+                NSCompoundPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[predicateMediaType]];
+                
+                if ([[NSString stringWithFormat:@"%@",self.picker.assetsFetchOptions.predicate] isEqualToString:[NSString stringWithFormat:@"%@",compoundPredicate]]){
+                    self.title=CTAssetsPickerLocalizedString(@"Videos",nil);
+                }
+                else{
+                    self.title = CTAssetsPickerLocalizedString(@"Photos", nil);}
+            }
+            else{
+                
+            
+            NSPredicate *photoPredicate = [self predicateOfMediaType:PHAssetMediaTypeImage];
+            NSPredicate *videoPredicate = [self predicateOfMediaType:PHAssetMediaTypeVideo];
+            
+            BOOL photoSelected = ([self.picker.selectedAssets filteredArrayUsingPredicate:photoPredicate].count > 0);
+            BOOL videoSelected = ([self.picker.selectedAssets filteredArrayUsingPredicate:videoPredicate].count > 0);
+            
+            NSString *format;
+            
+            if (photoSelected||videoSelected){
+                if (photoSelected && videoSelected)
+                    format = CTAssetsPickerLocalizedString(@"%@ Items Selected", nil);
+                
+                else if (photoSelected)
+                    format = (self.picker.selectedAssets.count > 1) ?
+                    CTAssetsPickerLocalizedString(@"%@ Photos Selected", nil) :
+                    CTAssetsPickerLocalizedString(@"%@ Photo Selected", nil);
+                
+                else if (videoSelected)
+                    format = (self.picker.selectedAssets.count > 1) ?
+                    CTAssetsPickerLocalizedString(@"%@ Videos Selected", nil) :
+                    CTAssetsPickerLocalizedString(@"%@ Video Selected", nil);
+                
+                NSNumberFormatter *nf = [NSNumberFormatter new];
+                
+                NSString *countAssets=[nf ctassetsPickerStringFromAssetsCount:self.picker.selectedAssets.count];
+                
+                
+                self.title = [NSString stringWithFormat:format, countAssets];
+        
+        }
+            else{
+            NSPredicate *predicateMediaType = [NSPredicate predicateWithFormat:@"mediaType = %d",PHAssetMediaTypeVideo];
+            NSCompoundPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[predicateMediaType]];
+            
+            if ([[NSString stringWithFormat:@"%@",self.picker.assetsFetchOptions.predicate] isEqualToString:[NSString stringWithFormat:@"%@",compoundPredicate]]){
+                self.title=CTAssetsPickerLocalizedString(@"Videos",nil);
+            }
+            else{
+                self.title = CTAssetsPickerLocalizedString(@"Photos", nil);}
+            }
+
+    }
+    }
     }
     else
         self.title = self.picker.title;

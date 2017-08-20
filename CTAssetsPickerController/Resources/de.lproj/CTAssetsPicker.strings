@@ -4,6 +4,7 @@
 
 /* Default title */
 "Photos" = "Fotos";
+"Videos" = "Videos";
 
 /* No. of selected */
 "%@ Photo Selected" = "%@ Foto ausgewählt";
