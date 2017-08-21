@@ -411,8 +411,8 @@
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     
     if (!self.picker.title){
-        if((orientation == UIInterfaceOrientationLandscapeLeft)
-                                                                                ||(orientation == UIInterfaceOrientationLandscapeRight)){
+        if(((orientation == UIInterfaceOrientationLandscapeLeft)
+                                                                                ||(orientation == UIInterfaceOrientationLandscapeRight))&&([[UIDevice currentDevice] userInterfaceIdiom]!=UIUserInterfaceIdiomPad)){
             
             NSPredicate *predicateMediaType = [NSPredicate predicateWithFormat:@"mediaType = %d",PHAssetMediaTypeVideo];
             NSCompoundPredicate *compoundPredicate = [NSCompoundPredicate andPredicateWithSubpredicates:@[predicateMediaType]];
