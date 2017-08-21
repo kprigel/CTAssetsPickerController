@@ -541,7 +541,22 @@
     [cell bind:collection count:count];
     [self requestThumbnailsForCell:cell assetCollection:collection];
     
+    if (count==0)
+        cell.hidden=TRUE;
+    
     return cell;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //static NSString *cellIdentifier = @"CellIdentifier";
+    
+    CTAssetCollectionViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    if (cell.isHidden)
+        return 0.0;
+    else
+        return self.tableView.estimatedRowHeight;
 }
 
 - (void)requestThumbnailsForCell:(CTAssetCollectionViewCell *)cell assetCollection:(PHAssetCollection *)collection

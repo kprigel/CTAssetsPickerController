@@ -107,11 +107,11 @@
     [self.contentView addSubview:self.thumbnailStacks];
     [self.contentView addSubview:self.labelsView];
     
-    UIImage *accessory = [UIImage ctassetsPickerImageNamed:@"DisclosureArrow"];
-    accessory = [accessory imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    UIImageView *accessoryView = [[UIImageView alloc] initWithImage:accessory];
-    accessoryView.tintColor = self.accessoryColor;
-    self.accessoryView = accessoryView;
+   // UIImage *accessory = [UIImage ctassetsPickerImageNamed:@"DisclosureArrow"];
+   // accessory = [accessory imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+   // UIImageView *accessoryView = [[UIImageView alloc] initWithImage:accessory];
+   // accessoryView.tintColor = self.accessoryColor;
+   // self.accessoryView = accessoryView;
 }
 
 - (void)setupPlaceholderImage
