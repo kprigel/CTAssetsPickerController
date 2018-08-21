@@ -55,6 +55,8 @@
 @property (nonatomic, assign) BOOL didShowDefaultAssetCollection;
 @property (nonatomic, assign) BOOL didSelectDefaultAssetCollection;
 
+@property (nonatomic,strong) NSMutableDictionary *assetCounts;
+
 @end
 
 
@@ -82,6 +84,8 @@
     [self setupDefaultAssetCollection];
     [self setupFetchResults];
     [self registerChangeObserver];
+    
+    self.assetCounts=[[NSMutableDictionary alloc] init];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -526,7 +530,20 @@
     NSUInteger count;
     
     if (self.picker.showsNumberOfAssets)
-        count = [collection ctassetPikcerCountOfAssetsFetchedWithOptions:self.picker.assetsFetchOptions];
+        {
+            if ([self.assetCounts objectForKey:indexPath])
+                count=[[self.assetCounts objectForKey:indexPath] integerValue];
+            else{
+                PHAssetCollection *collection = self.assetCollections[indexPath.row];
+                
+                if (self.picker.showsNumberOfAssets)
+                    count = [collection ctassetPikcerCountOfAssetsFetchedWithOptions:self.picker.assetsFetchOptions];
+                else
+                    count = NSNotFound;
+                
+                [self.assetCounts setObject:[NSNumber numberWithInteger:count] forKey:indexPath];
+            }
+        }
     else
         count = NSNotFound;
     
@@ -549,14 +566,26 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //static NSString *cellIdentifier = @"CellIdentifier";
+    NSUInteger count;
     
-    CTAssetCollectionViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    if ([self.assetCounts objectForKey:indexPath])
+        count=[[self.assetCounts objectForKey:indexPath] integerValue];
+    else{
+        PHAssetCollection *collection = self.assetCollections[indexPath.row];
+        
+        
+        if (self.picker.showsNumberOfAssets)
+            count = [collection ctassetPikcerCountOfAssetsFetchedWithOptions:self.picker.assetsFetchOptions];
+        else
+            count = NSNotFound;
     
-    if (cell.isHidden)
+        [self.assetCounts setObject:[NSNumber numberWithInteger:count] forKey:indexPath];
+    }
+    
+    if (count==0)
         return 0.0;
     else
-        return self.tableView.estimatedRowHeight;
+        return UITableViewAutomaticDimension;
 }
 
 - (void)requestThumbnailsForCell:(CTAssetCollectionViewCell *)cell assetCollection:(PHAssetCollection *)collection
