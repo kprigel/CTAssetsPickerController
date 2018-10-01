@@ -247,6 +247,7 @@
     }
 
     self.assetCollections = [NSMutableArray arrayWithArray:assetCollections];
+    [self reloadData];
 }
 
 - (void)setupDefaultAssetCollection
@@ -505,10 +506,14 @@
 
 - (void)reloadData
 {
-    if (self.assetCollections.count > 0)
+    if ([self.assetCollections count] > 0)
+    {
         [self.tableView reloadData];
+    }
     else
-        [self.picker showNoAssets];
+    {
+        //[self.picker showNoAssets];
+    }
 }
 
 

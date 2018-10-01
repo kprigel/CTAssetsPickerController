@@ -128,30 +128,30 @@ NSString * const CTAssetsPickerDidDeselectAssetNotification = @"CTAssetsPickerDi
 {
     _assetCollectionSubtypes =
     @[@(PHAssetCollectionSubtypeSmartAlbumUserLibrary),
-      @(PHAssetCollectionSubtypeAlbumMyPhotoStream),
       @(PHAssetCollectionSubtypeSmartAlbumRecentlyAdded),
       @(PHAssetCollectionSubtypeSmartAlbumFavorites),
+      @(PHAssetCollectionSubtypeAlbumRegular),
       @(PHAssetCollectionSubtypeSmartAlbumPanoramas),
       @(PHAssetCollectionSubtypeSmartAlbumVideos),
- //     @(PHAssetCollectionSubtypeSmartAlbumSlomoVideos),
- //     @(PHAssetCollectionSubtypeSmartAlbumTimelapses),
+      @(PHAssetCollectionSubtypeSmartAlbumScreenshots),
+      @(PHAssetCollectionSubtypeSmartAlbumSelfPortraits),
       @(PHAssetCollectionSubtypeSmartAlbumBursts),
       @(PHAssetCollectionSubtypeSmartAlbumAllHidden),
       @(PHAssetCollectionSubtypeSmartAlbumGeneric),
-      @(PHAssetCollectionSubtypeAlbumRegular),
       @(PHAssetCollectionSubtypeAlbumSyncedAlbum),
       @(PHAssetCollectionSubtypeAlbumSyncedEvent),
       @(PHAssetCollectionSubtypeAlbumSyncedFaces),
       @(PHAssetCollectionSubtypeAlbumImported),
-      @(PHAssetCollectionSubtypeAlbumCloudShared)];
+      @(PHAssetCollectionSubtypeAlbumCloudShared),
+      @(PHAssetCollectionSubtypeAlbumMyPhotoStream),
+      
+      ];
     
     // Add iOS 9's new albums
     if ([[PHAsset new] respondsToSelector:@selector(sourceType)])
     {
         NSMutableArray *subtypes = [NSMutableArray arrayWithArray:self.assetCollectionSubtypes];
-        [subtypes insertObject:@(PHAssetCollectionSubtypeSmartAlbumSelfPortraits) atIndex:4];
-        [subtypes insertObject:@(PHAssetCollectionSubtypeSmartAlbumScreenshots) atIndex:10];
-        
+
         self.assetCollectionSubtypes = [NSArray arrayWithArray:subtypes];
     }
 }
@@ -224,7 +224,7 @@ NSString * const CTAssetsPickerDidDeselectAssetNotification = @"CTAssetsPickerDi
 {
     PHFetchResult *fetchResult = [PHAsset fetchAssetsWithOptions:self.assetsFetchOptions];
     
-    if (fetchResult.count > 0) {
+    if ([fetchResult count] > 0) {
         [self showAssetCollectionViewController];
     } else {
         [self showNoAssets];

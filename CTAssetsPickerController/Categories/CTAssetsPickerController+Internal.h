@@ -31,6 +31,7 @@
 
 - (void)setShouldCollapseDetailViewController:(BOOL)collapse;
 - (void)showNoAssets;
+-(void)showAssetCollectionViewController;
 
 - (CGSize)assetCollectionThumbnailSize;
 - (CGSize)assetThumbnailSize;
