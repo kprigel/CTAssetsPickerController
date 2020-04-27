@@ -772,6 +772,7 @@ NSString * const CTAssetsGridViewFooterIdentifier = @"CTAssetsGridViewFooterIden
         vc.pageIndex = indexPath.item;
         
         [self.navigationController pushViewController:vc animated:YES];
+        return NO;
     }
     else{
     CTAssetsGridViewCell *cell = (CTAssetsGridViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
