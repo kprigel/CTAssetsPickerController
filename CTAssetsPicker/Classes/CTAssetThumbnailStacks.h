@@ -27,25 +27,14 @@
 #import <UIKit/UIKit.h>
 #import "CTAssetThumbnailView.h"
 
-<<<<<<< HEAD:CTAssetsPickerController/CTAssetThumbnailStacks.h
-NS_ASSUME_NONNULL_BEGIN
-
-@interface CTAssetThumbnailStacks : UIView
-
-@property (nonatomic, assign) CGSize thumbnailSize;
-@property (nonatomic, copy, readonly,nullable) NSArray<CTAssetThumbnailView*> *thumbnailViews;
-=======
 
 @interface CTAssetThumbnailStacks: UIView
 
 @property (nonatomic, assign) CGSize thumbnailSize;
 @property (nonatomic, copy, readonly) NSArray<CTAssetThumbnailView *> *_Nullable thumbnailViews;
->>>>>>> ba8e30d54ca765922b4e3461f735b716ddb9061e:CTAssetsPicker/Classes/CTAssetThumbnailStacks.h
 @property (nonatomic, assign, readonly) UIEdgeInsets edgeInsets;
 
 - (nonnull CTAssetThumbnailView *)thumbnailAtIndex:(NSUInteger)index;
 - (void)setHighlighted:(BOOL)highlighted;
 
 @end
-
-NS_ASSUME_NONNULL_END
