@@ -1,5 +1,24 @@
 # CTAssetsPickerController
 
+## Forked & used by the Medbee app (April, 2020)
+
+UIImagePickerController does not support multiselection therefore this project will be maintained
+as it's needed in the Medbee app. Currently following features where added:
+
+* Dark Mode Support
+* Carthage Support
+
+To add carthage support a framework target was created. Because the header file CTAssetsPickerController.h would clash with the umbrealla header the project was renamed to CTAssetsPicker.
+
+### Note
+Because iOS does not support umbrealla frameworks (frameworks embedded in each other) another Framework must be included externally. Do this by adding both lines to your cartfile.
+
+```
+github "PureLayout/PureLayout"
+github "medbee/MDBAssetsPicker"
+```
+
+
 ## Development Suspended (1 June, 2016)
 
 As I am busy on both of my work and personal life, it seems that I have no more spare time to maintain this project in coming year. The development of this project is suspended. Anyone who would like to keep this project running, just fork it. 
